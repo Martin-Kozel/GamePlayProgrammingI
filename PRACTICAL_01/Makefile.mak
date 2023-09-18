@@ -1,2 +1,11 @@
-hello:
-	echo "Checking that tabs are setup correctly"
+all:= build
+
+build:
+    @echo "Build Started"
+    g++ -o sampleapp ./src/MakeMeAFile.cpp -I.
+    @echo "Build Complete"
+    ./sampleapp
+
+clean:
+    @echo "Cleaning up"
+    rm *.o
