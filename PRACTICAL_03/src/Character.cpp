@@ -1,23 +1,20 @@
 #include "Character.h"
 #include <iostream>
-#include <cstdlib>
 
-using namespace std;
-
-Character::Character(std::string name) : name(name) {}
-
-// void Character::Attack(Character* target) {
-//     int damage = rand()% attack;
-//     target->TakeDamage(damage);
-//     cout << name << " attacks " << target->GetName() << " for " << damage << " damage."<<endl;
-// }
+Character::Character(std::string name) : name(name), health(100) { // Initialize health to 100 or any other value
+}
 
 std::string Character::GetName() const {
     return name;
 }
 
-// bool Character::IsAlive() const {
-//     return health > 0;
-// }
+int Character::GetHealth() const {
+    return health;
+}
 
-Character::~Character() {}
+void Character::SetHealth(int newHealth) {
+    health = newHealth;
+}
+
+Character::~Character() {
+}

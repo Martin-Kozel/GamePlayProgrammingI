@@ -3,7 +3,6 @@
 #include "Character.h"
 
 class Troll : public Character {
-
 public:
     Troll(std::string name);
 };
