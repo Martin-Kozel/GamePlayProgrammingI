@@ -21,9 +21,6 @@ int main() {
 
     int playerChoice;
 
-    // Cooldown for the player's sword
-    int swordCooldown = 0;
-
     // Prompt the user to choose a character
     cout << "Choose your character:" << endl;
     cout << "1. Orc" << endl;
@@ -37,14 +34,14 @@ int main() {
 
         cout << endl;
         cout << "You've selected " << playerCharacter->GetName() << ". Good luck!" << endl;
-        cout << endl;
+        cout << "-----------------------------------------------------------------------------" << endl;
     } else if (playerChoice == 2) {
         playerCharacter = &troll;
         enemyCharacter = &orc;
 
         cout << endl;
         cout << "You've selected " << playerCharacter->GetName() << ". Good luck!" << endl;
-        cout << endl;
+        cout << "-----------------------------------------------------------------------------" << endl;
     } else {
         cout << "Invalid choice." << endl;
         return 0;
@@ -68,50 +65,40 @@ int main() {
         cin >> playerActionChoice;
 
         if (playerActionChoice == 1) {
-            if (swordCooldown <= 0) {
-                int playerWeaponChoice;
+            int playerWeaponChoice;
+            cout << endl;
+            cout << "Select your weapon:" << endl;
+            cout << "1. Sword" << endl;
+            cout << "2. Bat" << endl;
+            cout << endl;
+            cin >> playerWeaponChoice;
+
+            if (playerWeaponChoice == 1) {
+                // Assign the sword to the selected weapon pointer
+                Weapon* selectedPlayerWeapon = &playerSword;
+
+                // Calculate damage and update the enemy's health
+                int damage = selectedPlayerWeapon->GetPower();
+                int enemyHealth = enemyCharacter->GetHealth();
+                int updatedEnemyHealth = enemyHealth - damage;
+                enemyCharacter->TakeDamage(damage);
                 cout << endl;
-                cout << "Select your weapon:" << endl;
-                cout << "1. Sword" << endl;
-                cout << "2. Bat" << endl;
+                cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
+            } else if (playerWeaponChoice == 2) {
+                Weapon* selectedPlayerWeapon = &playerBat;
+
+                // Calculate damage and update the enemy's health
+                int damage = selectedPlayerWeapon->GetPower();
+                int enemyHealth = enemyCharacter->GetHealth();
+                int updatedEnemyHealth = enemyHealth - damage;
+                enemyCharacter->TakeDamage(damage);
                 cout << endl;
-                cin >> playerWeaponChoice;
-
-                if (playerWeaponChoice == 1) {
-                    // Assign the sword to the selected weapon pointer
-                    swordCooldown = 3; // Set the cooldown
-                    Weapon* selectedPlayerWeapon = &playerSword;
-
-                    // Calculate damage and update the enemy's health
-                    int damage = selectedPlayerWeapon->GetPower();
-                    int enemyHealth = enemyCharacter->GetHealth();
-                    int updatedEnemyHealth = enemyHealth - damage;
-                    enemyCharacter->TakeDamage(damage);
-                    cout << endl;
-                    cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
-                } else if (playerWeaponChoice == 2) {
-                    Weapon* selectedPlayerWeapon = &playerBat;
-
-                    // Calculate damage and update the enemy's health
-                    int damage = selectedPlayerWeapon->GetPower();
-                    int enemyHealth = enemyCharacter->GetHealth();
-                    int updatedEnemyHealth = enemyHealth - damage;
-                    enemyCharacter->TakeDamage(damage);
-                    cout << endl;
-                    cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
-                } else {
-                    cout << "Invalid weapon choice." << endl;
-                }
+                cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
             } else {
-                cout << "Sword is on cooldown for " << swordCooldown << " rounds." << endl;
+                cout << "Invalid weapon choice." << endl;
             }
         } else {
             playerCharacter->Defend(&playerShield);
-        }
-
-        // Reduce the cooldown for the sword
-        if (swordCooldown > 0) {
-            --swordCooldown;
         }
 
         cout << endl;
