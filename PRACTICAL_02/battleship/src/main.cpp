@@ -3,6 +3,8 @@
 #include <cstdlib>
 using namespace std;
 
+
+
 enum WarHead {
     EXPLOSIVE,
     NUCLEAR
@@ -18,7 +20,12 @@ int enemyshipsYcords[MAXSHIPS];
 int pos_x = 0;
 int pos_y = 0;
 
+int code;
+int codeInput;
+
 WarHead selectWarhead() {
+    srand(static_cast<unsigned>(time(0)));
+
     cout << "Choose your warhead" << '\n';
     cout << endl;
     cout << "N = Nuclear" << endl;
@@ -32,9 +39,17 @@ WarHead selectWarhead() {
     if (input == 'n') {
         selected = WarHead::NUCLEAR;
         cout << "You have selected Nuclear" << endl;
+        code = (rand() % 8999) + 1000;
+        cout << "Your launch code is: " << code << endl;
+        cout << "Enter the code if you want to start the war: " << endl;
+        cin >> codeInput;
         cout << endl;
     } else if (input == 'e') {
         cout << "You have selected Explosive" << endl;
+        code = (rand() % 8999) + 1000;
+        cout << "Your launch code is: " << code << endl;
+        cout << "Enter the code if you want to start the war: " << endl;
+        cin >> codeInput;
         cout << endl;
     }
     return selected;
