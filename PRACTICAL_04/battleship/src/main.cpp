@@ -26,11 +26,11 @@ int codeInput;
 WarHead selectWarhead() {
     srand(static_cast<unsigned>(time(0)));
 
-    cout << "Choose your warhead" << '\n';
-    cout << endl;
-    cout << "N = Nuclear" << endl;
-    cout << "E = Explosive" << endl;
-    cout << endl;
+    std::cout << "Choose your warhead" << '\n';
+    std::cout << endl;
+    std::cout << "N = Nuclear" << endl;
+    std::cout << "E = Explosive" << endl;
+    std::cout << endl;
 
     char input = cin.get();
 
@@ -38,34 +38,47 @@ WarHead selectWarhead() {
 
     if (input == 'n') {
         selected = WarHead::NUCLEAR;
-        cout << "You have selected Nuclear" << endl;
+        std::cout << "You have selected Nuclear" << endl;
         code = (rand() % 8999) + 1000;
-        cout << "Your launch code is: " << code << endl;
-        cout << "Enter the code if you want to start the war: " << endl;
+        std::cout << "Your launch code is: " << code << endl;
+        std::cout << "Enter the code if you want to start the war: " << endl;
         cin >> codeInput;
-        cout << endl;
+        std::cout << endl;
+
+        while (codeInput != code) {
+            std::cout << "Incorrect code. Try again: ";
+            cin >> codeInput;
+            std::cout << endl;
+        }
     } else if (input == 'e') {
-        cout << "You have selected Explosive" << endl;
+        std::cout << "You have selected Explosive" << endl;
         code = (rand() % 8999) + 1000;
-        cout << "Your launch code is: " << code << endl;
-        cout << "Enter the code if you want to start the war: " << endl;
+        std::cout << "Your launch code is: " << code << endl;
+        std::cout << "Enter the code if you want to start the war: " << endl;
         cin >> codeInput;
-        cout << endl;
+        std::cout << endl;
+
+        while (codeInput != code) {
+            std::cout << "Incorrect code. Try again: ";
+            cin >> codeInput;
+            std::cout << endl;
+        }
     }
+
     return selected;
 }
 
 void placeships() {
     int count = 1;
     for (int i = 0; i < MAXSHIPS; i++) {
-        cout << "Enter X & Y position between 1 - 3 for ship " << count << endl;
+        std::cout << "Enter X & Y position between 1 - 3 for ship " << count << endl;
         bool validInput = false;
 
         while (!validInput) {
             cin >> XcordArray[i] >> YcordArray[i];
 
             // Check if input is within the valid range
-            if (XcordArray[i] >= 0 && XcordArray[i] <= 4 && YcordArray[i] >= 0 && YcordArray[i] <= 4) {
+            if (XcordArray[i] >= 1 && XcordArray[i] <= 3 && YcordArray[i] >= 1 && YcordArray[i] <= 3) {
                 validInput = true;
 
                 // Check if the position matches a previously entered one
@@ -78,15 +91,15 @@ void placeships() {
                 }
 
                 if (duplicate) {
-                    cout << "You already have a ship there. Enter a different position." << endl;
+                    std::cout << "You already have a ship there. Enter a different position." << endl;
                     validInput = false;
                 }
             } else {
-                cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
+                std::cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
             }
         }
 
-        cout << "Ship " << count << " position is X = " << XcordArray[i] << ", Y = " << YcordArray[i] << endl;
+        std::cout << "Ship " << count << " position is X = " << XcordArray[i] << ", Y = " << YcordArray[i] << endl;
         count++;
     }
 }
@@ -115,18 +128,18 @@ void Enemyships() {
         enemyshipsXcords[i] = x;
         enemyshipsYcords[i] = y;
 
-        cout << "Enemy Ship " << (i + 1) << " Position = X: " << x << ", Y: " << y << endl;
+        std::cout << "Enemy Ship " << (i + 1) << " Position = X: " << x << ", Y: " << y << endl;
     }
 }
 
 
 void Firing() {
-    cout << "Please enter the X & Y Position you want to shoot at." << endl;
+    std::cout << "Please enter the X & Y Position you want to shoot at." << endl;
     cin >> pos_x >> pos_y;
 
     // Check if input is within the valid range
-    if (pos_x < 0 || pos_x > 8 || pos_y < 0 || pos_y > 8) {
-        cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
+    if (pos_x < 1 || pos_x > 3 || pos_y < 1 || pos_y > 3) {
+        std::cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
         Firing(); // Re-prompt for input
     }
 }
@@ -144,9 +157,9 @@ void checkHit() {
     }
 
     if (hit) {
-        cout << "You hit an enemy ship!" << endl;
+        std::cout << "You hit an enemy ship!" << endl;
     } else {
-        cout << "You missed" << endl;
+        std::cout << "You missed" << endl;
     }
 }
 
@@ -166,9 +179,9 @@ void enemyFiring() {
     }
 
     if (hit) {
-        cout << "The enemy has sunk one of your battleships." << endl;
+        std::cout << "The enemy has sunk one of your battleships." << endl;
     } else {
-        cout << "The enemy missed their shot." << endl;
+        std::cout << "The enemy missed their shot." << endl;
     }
 }
 
@@ -200,9 +213,9 @@ int main() {
     }
 
     if (enemyShipsRemaining == 0) {
-        cout << "You've sunk all enemy ships! You win!" << endl;
+        std::cout << "You've sunk all enemy ships! You win!" << endl;
     } else {
-        cout << "The enemy has sunk all your ships. You lose!" << endl;
+        std::cout << "The enemy has sunk all your ships. You lose!" << endl;
     }
 
     return 0;

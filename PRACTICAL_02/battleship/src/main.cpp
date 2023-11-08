@@ -65,7 +65,7 @@ void placeships() {
             cin >> XcordArray[i] >> YcordArray[i];
 
             // Check if input is within the valid range
-            if (XcordArray[i] >= 0 && XcordArray[i] <= 4 && YcordArray[i] >= 0 && YcordArray[i] <= 4) {
+            if (XcordArray[i] >= 1 && XcordArray[i] <= 3 && YcordArray[i] >= 1 && YcordArray[i] <= 3) {
                 validInput = true;
 
                 // Check if the position matches a previously entered one
@@ -125,7 +125,7 @@ void Firing() {
     cin >> pos_x >> pos_y;
 
     // Check if input is within the valid range
-    if (pos_x < 0 || pos_x > 8 || pos_y < 0 || pos_y > 8) {
+    if (pos_x < 1 || pos_x > 3 || pos_y < 1 || pos_y > 3) {
         cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
         Firing(); // Re-prompt for input
     }
