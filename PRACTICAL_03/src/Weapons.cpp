@@ -1,22 +1,27 @@
 #include "Weapons.h"
 
+// Constructor for the Weapon class
 Weapon::Weapon(int power, int cooldown) {
-    this->power = power;
-    this->cooldown = cooldown;
+    this->power = power;      // Set the power of the weapon
+    this->cooldown = cooldown;  // Set the cooldown time of the weapon
 }
 
+// Get the power of the weapon
 int Weapon::GetPower() const {
     return power;
 }
 
+// Get the cooldown time of the weapon 
 int Weapon::GetCooldown() const {
     return cooldown;
 }
 
+// Apply the cooldown to the weapon
 void Weapon::ApplyCooldown() {
-    currentCooldown = cooldown;
+    currentCooldown = cooldown;  // Set the currentCooldown to the weapon's cooldown value
 }
 
+// Calculate the damage inflicted when using this weapon against another weapon
 int Weapon::CalculateDamage(const Weapon& otherWeapon) const {
     if (this->power == otherWeapon.power) {
         // Same weapon type, both characters lose 10 HP

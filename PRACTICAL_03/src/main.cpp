@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
+#include <ctime> // include real time
 #include "Character.h"
 #include "Troll.h"
 #include "Orc.h"
@@ -9,44 +9,46 @@
 using namespace std;
 
 int main() {
-    srand(static_cast<unsigned int>(time(nullptr))); // Initialize the random number generator
+    srand(static_cast<unsigned int>(time(nullptr))); // Make numbers random, thanks to time
 
     cout << endl;
 
+    // Create the fighters
     Orc orc("Orc");
     Troll troll("Troll");
 
-    Character* playerCharacter; // Declare a pointer to the player character
-    Character* enemyCharacter;  // Declare a pointer to the enemy character
+    Character* playerCharacter; // Make a pointer for the player
+    Character* enemyCharacter;  // Another pointer for the enemy
 
     int playerChoice;
 
-    // Prompt the user to choose a character
-    cout << "Choose your character:" << endl;
+    // Ask to pick a warrior
+    cout << "Choose your warrior:" << endl;
     cout << "1. Orc" << endl;
     cout << "2. Troll" << endl;
     cout << endl;
     cin >> playerChoice;
 
     if (playerChoice == 1) {
-        playerCharacter = &orc;   // Assign the player pointer to the Orc character
-        enemyCharacter = &troll;  // Assign the enemy pointer to the Troll character
+        playerCharacter = &orc;   // I chose Orc for the player
+        enemyCharacter = &troll;  // Troll is the enemy
 
         cout << endl;
-        cout << "You've selected " << playerCharacter->GetName() << ". Good luck!" << endl;
-        cout << "-----------------------------------------------------------------------------" << endl;
+        cout << "You select " << playerCharacter->GetName() << ". Good luck!" << endl;
+        cout << "-----------------------------------------------------------------------------" << endl; // end of the roound
     } else if (playerChoice == 2) {
-        playerCharacter = &troll;
-        enemyCharacter = &orc;
+        playerCharacter = &troll; // Troll is my warrior
+        enemyCharacter = &orc;   // Orc is the enemy
 
         cout << endl;
-        cout << "You've selected " << playerCharacter->GetName() << ". Good luck!" << endl;
-        cout << "-----------------------------------------------------------------------------" << endl;
+        cout << "You take " << playerCharacter->GetName() << ". Wish good luck!" << endl;
+        cout << "-----------------------------------------------------------------------------" << endl; // end of the round
     } else {
         cout << "Invalid choice." << endl;
         return 0;
     }
 
+    // Get weapons
     Weapon playerSword(30, 2);
     Weapon playerShield(20, 1);
     Weapon playerBat(15, 1);
@@ -57,8 +59,8 @@ int main() {
 
         int playerActionChoice;
 
-        // Prompt the player to choose an action (attack or defend)
-        cout << "Choose your action:" << endl;
+        // Choose attack or defend
+        cout << "What will you do?" << endl;
         cout << "1. Attack" << endl;
         cout << "2. Defend" << endl;
         cout << endl;
@@ -67,37 +69,41 @@ int main() {
         if (playerActionChoice == 1) {
             int playerWeaponChoice;
             cout << endl;
-            cout << "Select your weapon:" << endl;
+            cout << "Choose your weapon:" << endl;
             cout << "1. Sword" << endl;
             cout << "2. Bat" << endl;
             cout << endl;
             cin >> playerWeaponChoice;
 
             if (playerWeaponChoice == 1) {
-                // Assign the sword to the selected weapon pointer
+                // Player chooses sword
                 Weapon* selectedPlayerWeapon = &playerSword;
 
-                // Calculate damage and update the enemy's health
+                // Damage to enemy
                 int damage = selectedPlayerWeapon->GetPower();
                 int enemyHealth = enemyCharacter->GetHealth();
                 int updatedEnemyHealth = enemyHealth - damage;
                 enemyCharacter->TakeDamage(damage);
                 cout << endl;
-                cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
-            } else if (playerWeaponChoice == 2) {
+                cout << enemyCharacter->GetName() << " has less health now: " << updatedEnemyHealth << endl;
+            } 
+            else if (playerWeaponChoice == 2) {
+                // Player chooses bat
                 Weapon* selectedPlayerWeapon = &playerBat;
 
-                // Calculate damage and update the enemy's health
+                // Hurt the enemy
                 int damage = selectedPlayerWeapon->GetPower();
                 int enemyHealth = enemyCharacter->GetHealth();
                 int updatedEnemyHealth = enemyHealth - damage;
                 enemyCharacter->TakeDamage(damage);
                 cout << endl;
-                cout << enemyCharacter->GetName() << "'s health is now " << updatedEnemyHealth << endl;
-            } else {
-                cout << "Invalid weapon choice." << endl;
+                cout << enemyCharacter->GetName() << " has less health now: " << updatedEnemyHealth << endl;
+            } 
+            else {
+                cout << "Invalid choice." << endl;
             }
-        } else {
+        } 
+        else {
             playerCharacter->Defend(&playerShield);
         }
 
@@ -105,19 +111,20 @@ int main() {
         cout << "Enemy's turn:" << endl;
 
         if (enemyCharacter->IsAlive()) {
-            // Randomly select the enemy's weapon (sword or bat)
+            // Randomly choose the enemy's weapon (sword or bat)
             int enemyWeaponChoice = (rand() % 2) + 1;
             Weapon* enemySelectedWeapon = (enemyWeaponChoice == 1) ? &playerSword : &playerBat;
 
             if (enemySelectedWeapon == &playerSword && playerCharacter->IsDefendingWithShield()) {
-                // Player defends with a shield, takes no damage
+                // I use the shield, no damage for me
                 int damage = 0;
                 playerCharacter->TakeDamage(damage);
                 cout << endl;
-                cout << playerCharacter->GetName() << " defends with a shield, taking " << damage << " damage." << endl;
+                cout << playerCharacter->GetName() << " hides behind a shield, taking " << damage << " damage." << endl;
                 cout << endl;
-            } else {
-                // Calculate damage and update player's health
+            } 
+            else {
+                // hurts enemy
                 int damage = enemySelectedWeapon->GetPower();
                 playerCharacter->TakeDamage(damage);
                 cout << endl;
@@ -126,12 +133,12 @@ int main() {
             }
         }
 
-        // Display player and enemy health
-        cout << "Player's Health: " << playerCharacter->GetHealth() << endl;
+        // Show the health
+        cout << "Your Health: " << playerCharacter->GetHealth() << endl;
         cout << "Enemy's Health: " << enemyCharacter->GetHealth() << endl;
-        cout << "-----------------------------------------------------------------------------" << endl;
+        cout << "-----------------------------------------------------------------------------" << endl; // end of the round
 
-        // Check for game over conditions
+        // Check if the game is over
         if (!playerCharacter->IsAlive() || !enemyCharacter->IsAlive()) {
             break;
         }
@@ -139,9 +146,10 @@ int main() {
 
     // Game over message
     if (playerCharacter->IsAlive()) {
-        cout << "Congratulations! You've won!" << endl;
-    } else {
-        cout << "The enemy has triumphed!" << endl;
+        cout << "You win!" << endl;
+    } 
+    else {
+        cout << "Enemy wins!" << endl;
     }
 
     return 0;

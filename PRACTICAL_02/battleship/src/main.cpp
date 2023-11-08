@@ -1,129 +1,194 @@
 #include <iostream>
-
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
-typedef struct Position
-{
-	int x;
-	int y;
-	void
-	print()
-	{
-		cout << "[ x: " << x << " ]" << "[ y: " << y << " ]" << endl;
-	}
-} Coordinates;
-
-enum WarHead
-{
-	EXPLOSIVE,
-	NUCLEAR
+enum WarHead {
+    EXPLOSIVE,
+    NUCLEAR
 };
 
-typedef struct Enemy
-{
-	Coordinates coordinates;
-} Target;
+const int MAXSHIPS = 3;
+int XcordArray[MAXSHIPS];
+int YcordArray[MAXSHIPS];
 
-struct Missile
-{
-	WarHead payload;
-	Coordinates coordinates;
-	Target target;
+int enemyshipsXcords[MAXSHIPS];
+int enemyshipsYcords[MAXSHIPS];
 
-	bool armed;
+int pos_x = 0;
+int pos_y = 0;
 
-	void arm()
-	{
-		if (armed)
-			armed = false;
-		else
-			armed = true;
-	}
+WarHead selectWarhead() {
+    cout << "Choose your warhead" << '\n';
+    cout << endl;
+    cout << "N = Nuclear" << endl;
+    cout << "E = Explosive" << endl;
+    cout << endl;
 
-	void update()
-	{
-		coordinates.x += 1;
-		coordinates.y += 2;
-	}
-};
+    char input = cin.get();
 
-WarHead selectWarhead();
+    WarHead selected = WarHead::EXPLOSIVE;
 
-WarHead selectWarhead()
-{
-	cout << "Choose your warhead" << '\n';
-	cout << endl;
-	cout << "N = Nuclear" << endl;
-	cout << "E = Explosive" << endl;
-	cout << endl;
+    if (input == 'n') {
+        selected = WarHead::NUCLEAR;
+        cout << "You have selected Nuclear" << endl;
+        cout << endl;
+    } else if (input == 'e') {
+        cout << "You have selected Explosive" << endl;
+        cout << endl;
+    }
+    return selected;
+}
 
-	char input = cin.get();
+void placeships() {
+    int count = 1;
+    for (int i = 0; i < MAXSHIPS; i++) {
+        cout << "Enter X & Y position between 1 - 3 for ship " << count << endl;
+        bool validInput = false;
 
-	WarHead selected = WarHead::EXPLOSIVE;
+        while (!validInput) {
+            cin >> XcordArray[i] >> YcordArray[i];
 
-	if (input == 'n')
-	{
-		selected = WarHead::NUCLEAR;
-		cout << "You have selected Nuclear" << endl;
-		cout << endl;
-	}
-	else if (input == 'e')
-	{
-		cout << "You have selected Explosive" << endl;
-		cout << endl;
-	}
-	return selected;
+            // Check if input is within the valid range
+            if (XcordArray[i] >= 0 && XcordArray[i] <= 4 && YcordArray[i] >= 0 && YcordArray[i] <= 4) {
+                validInput = true;
+
+                // Check if the position matches a previously entered one
+                bool duplicate = false;
+                for (int j = 0; j < i; j++) {
+                    if (XcordArray[i] == XcordArray[j] && YcordArray[i] == YcordArray[j]) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+
+                if (duplicate) {
+                    cout << "You already have a ship there. Enter a different position." << endl;
+                    validInput = false;
+                }
+            } else {
+                cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
+            }
+        }
+
+        cout << "Ship " << count << " position is X = " << XcordArray[i] << ", Y = " << YcordArray[i] << endl;
+        count++;
+    }
+}
+
+void Enemyships() {
+    srand(static_cast<unsigned>(time(0)));
+
+    for (int i = 0; i < MAXSHIPS; i++) {
+        int x, y;
+        bool uniquePosition = false;
+
+        while (!uniquePosition) {
+            x = (rand() % 3) + 1;
+            y = (rand() % 3) + 1;
+            uniquePosition = true;
+
+            // Check if the new position matches any previously placed enemy ship
+            for (int j = 0; j < i; j++) {
+                if (x == enemyshipsXcords[j] && y == enemyshipsYcords[j]) {
+                    uniquePosition = false;
+                    break;
+                }
+            }
+        }
+
+        enemyshipsXcords[i] = x;
+        enemyshipsYcords[i] = y;
+
+        cout << "Enemy Ship " << (i + 1) << " Position = X: " << x << ", Y: " << y << endl;
+    }
 }
 
 
-int main()
-{
-	
-	// Create a new Enemy
-	Enemy *e = new Enemy();
+void Firing() {
+    cout << "Please enter the X & Y Position you want to shoot at." << endl;
+    cin >> pos_x >> pos_y;
 
-	cout << "Enter your coordinates" << endl;
-	
-	cout << endl;
+    // Check if input is within the valid range
+    if (pos_x < 0 || pos_x > 8 || pos_y < 0 || pos_y > 8) {
+        cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
+        Firing(); // Re-prompt for input
+    }
+}
 
-	// Set Enemy Position / Target
-	e->coordinates.x = 2;
-	e->coordinates.y = 2;
+void checkHit() {
+    bool hit = false;
 
-	// Create a new Missile
-	Missile *m = new Missile();
+    for (int i = 0; i < MAXSHIPS; i++) {
+        if (pos_x == enemyshipsXcords[i] && pos_y == enemyshipsYcords[i]) {
+            hit = true;
+            enemyshipsXcords[i] = -1; // Mark the ship as hit
+            enemyshipsYcords[i] = -1;
+            break; // No need to check other ships
+        }
+    }
 
-	// Set Missile Payload
-	m->payload = selectWarhead();
+    if (hit) {
+        cout << "You hit an enemy ship!" << endl;
+    } else {
+        cout << "You missed" << endl;
+    }
+}
 
-	// Set Missile Target by dereferencing Enemy pointer
-	m->target = *e;
+void enemyFiring() {
+    int ene_X = (rand() % 3) + 1; // Random number between 0 and 8
+    int ene_Y = (rand() % 3) + 1; // Random number between 0 and 8
 
-	// Set Initial Position
-	cout << "Where are you shooting?" << endl;
+    bool hit = false;
 
-	cout << "X" << endl;
-	cin >> m->coordinates.x;
+    for (int i = 0; i < MAXSHIPS; i++) {
+        if (ene_X == XcordArray[i] && ene_Y == YcordArray[i]) {
+            hit = true;
+            XcordArray[i] = -1; // Mark the player's ship as hit
+            YcordArray[i] = -1;
+            break; // No need to check other player's ships
+        }
+    }
 
-	cout << "Y" << endl;
-	cin >> m->coordinates.y;
-	
+    if (hit) {
+        cout << "The enemy has sunk one of your battleships." << endl;
+    } else {
+        cout << "The enemy missed their shot." << endl;
+    }
+}
 
-	// Print Position
-	cout << "Print Missile Position" << endl;
-	m->coordinates.print();
+int main() {
+    selectWarhead();
+    placeships();
+    Enemyships();
 
-	// Update Position
-	m->update();
+    int enemyShipsRemaining = MAXSHIPS;
+    int playerShipsRemaining = MAXSHIPS;
 
-	// Print Missile Position
-	cout << "Print Missile Position after an Update" << endl;
-	m->coordinates.print();
+    while (enemyShipsRemaining > 0 && playerShipsRemaining > 0) {
+        Firing();
+        checkHit();
+        enemyFiring();
 
+        // Check how many enemy and player ships remain
+        enemyShipsRemaining = 0;
+        playerShipsRemaining = 0;
 
-	// Print Missile target
-	cout << "Print Missile Target Position" << endl;
-	m->target.coordinates.print();
+        for (int i = 0; i < MAXSHIPS; i++) {
+            if (enemyshipsXcords[i] != -1) {
+                enemyShipsRemaining++;
+            }
+            if (XcordArray[i] != -1) {
+                playerShipsRemaining++;
+            }
+        }
+    }
 
-	cin.get();
+    if (enemyShipsRemaining == 0) {
+        cout << "You've sunk all enemy ships! You win!" << endl;
+    } else {
+        cout << "The enemy has sunk all your ships. You lose!" << endl;
+    }
+
+    return 0;
 }
