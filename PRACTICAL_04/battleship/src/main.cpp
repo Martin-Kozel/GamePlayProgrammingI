@@ -13,9 +13,22 @@ enum WarHead {
 const int MAXSHIPS = 3;
 int XcordArray[MAXSHIPS];
 int YcordArray[MAXSHIPS];
+int width[MAXSHIPS];
+int height[MAXSHIPS];
 
 int enemyshipsXcords[MAXSHIPS];
 int enemyshipsYcords[MAXSHIPS];
+int enemyshipsWidth[MAXSHIPS];
+int enemyshipsHeight[MAXSHIPS];
+
+int missileSelect;
+int missileX;
+int missileY;
+int missileRadius;
+
+int enemyMissileY;
+int enemyMissileX;
+int enemyMissileRadius = 1;
 
 int pos_x = 0;
 int pos_y = 0;
@@ -26,11 +39,11 @@ int codeInput;
 WarHead selectWarhead() {
     srand(static_cast<unsigned>(time(0)));
 
-    std::cout << "Choose your warhead" << '\n';
-    std::cout << endl;
-    std::cout << "N = Nuclear" << endl;
-    std::cout << "E = Explosive" << endl;
-    std::cout << endl;
+    cout << "Choose your warhead" << '\n';
+    cout << endl;
+    cout << "N = Nuclear" << endl;
+    cout << "E = Explosive" << endl;
+    cout << endl;
 
     char input = cin.get();
 
@@ -38,44 +51,35 @@ WarHead selectWarhead() {
 
     if (input == 'n') {
         selected = WarHead::NUCLEAR;
-        std::cout << "You have selected Nuclear" << endl;
+        cout << "You have selected Nuclear" << endl;
         code = (rand() % 8999) + 1000;
-        std::cout << "Your launch code is: " << code << endl;
-        std::cout << "Enter the code if you want to start the war: " << endl;
+        cout << "Your launch code is: " << code << endl;
+        cout << "Enter the code if you want to start the war: " << endl;
         cin >> codeInput;
-        std::cout << endl;
-
-        while (codeInput != code) {
-            std::cout << "Incorrect code. Try again: ";
-            cin >> codeInput;
-            std::cout << endl;
-        }
+        cout << endl;
     } else if (input == 'e') {
-        std::cout << "You have selected Explosive" << endl;
+        cout << "You have selected Explosive" << endl;
         code = (rand() % 8999) + 1000;
-        std::cout << "Your launch code is: " << code << endl;
-        std::cout << "Enter the code if you want to start the war: " << endl;
+        cout << "Your launch code is: " << code << endl;
+        cout << "Enter the code if you want to start the war: " << endl;
         cin >> codeInput;
-        std::cout << endl;
-
-        while (codeInput != code) {
-            std::cout << "Incorrect code. Try again: ";
-            cin >> codeInput;
-            std::cout << endl;
-        }
+        cout << endl;
     }
-
     return selected;
 }
 
-void placeships() {
+void Ships() {
+    srand((unsigned)time(0));
+
     int count = 1;
     for (int i = 0; i < MAXSHIPS; i++) {
-        std::cout << "Enter X & Y position between 1 - 3 for ship " << count << endl;
+        cout << "Enter X & Y position between 1 - 3 for ship " << count << endl;
         bool validInput = false;
 
         while (!validInput) {
             cin >> XcordArray[i] >> YcordArray[i];
+            width[i] = 1;
+            height[i] = 1;
 
             // Check if input is within the valid range
             if (XcordArray[i] >= 1 && XcordArray[i] <= 3 && YcordArray[i] >= 1 && YcordArray[i] <= 3) {
@@ -91,17 +95,21 @@ void placeships() {
                 }
 
                 if (duplicate) {
-                    std::cout << "You already have a ship there. Enter a different position." << endl;
+                    cout << "You already have a ship there. Enter a different position." << endl;
                     validInput = false;
                 }
-            } else {
-                std::cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
+            } 
+            else {
+                cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
             }
         }
 
-        std::cout << "Ship " << count << " position is X = " << XcordArray[i] << ", Y = " << YcordArray[i] << endl;
+        cout << "Ship " << count << " position is X = " << XcordArray[i] << ", Y = " << YcordArray[i] << endl;
         count++;
     }
+
+    
+
 }
 
 void Enemyships() {
@@ -128,66 +136,72 @@ void Enemyships() {
         enemyshipsXcords[i] = x;
         enemyshipsYcords[i] = y;
 
-        std::cout << "Enemy Ship " << (i + 1) << " Position = X: " << x << ", Y: " << y << endl;
+        cout << "Enemy Ship " << (i + 1) << " Position = X: " << x << ", Y: " << y << endl;
     }
 }
 
 
 void Firing() {
-    std::cout << "Please enter the X & Y Position you want to shoot at." << endl;
+    cout << "Please enter the X & Y Position you want to shoot at." << endl;
     cin >> pos_x >> pos_y;
 
     // Check if input is within the valid range
     if (pos_x < 1 || pos_x > 3 || pos_y < 1 || pos_y > 3) {
-        std::cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
+        cout << "ERROR: Enter a valid position within the range 1 - 3" << endl;
         Firing(); // Re-prompt for input
     }
 }
 
 void checkHit() {
-    bool hit = false;
-
-    for (int i = 0; i < MAXSHIPS; i++) {
-        if (pos_x == enemyshipsXcords[i] && pos_y == enemyshipsYcords[i]) {
-            hit = true;
-            enemyshipsXcords[i] = -1; // Mark the ship as hit
-            enemyshipsYcords[i] = -1;
-            break; // No need to check other ships
-        }
-    }
-
-    if (hit) {
-        std::cout << "You hit an enemy ship!" << endl;
-    } else {
-        std::cout << "You missed" << endl;
-    }
-}
-
-void enemyFiring() {
-    int ene_X = (rand() % 3) + 1; // Random number between 0 and 8
-    int ene_Y = (rand() % 3) + 1; // Random number between 0 and 8
 
     bool hit = false;
+    bool enemyHit = false;
 
-    for (int i = 0; i < MAXSHIPS; i++) {
-        if (ene_X == XcordArray[i] && ene_Y == YcordArray[i]) {
-            hit = true;
-            XcordArray[i] = -1; // Mark the player's ship as hit
-            YcordArray[i] = -1;
-            break; // No need to check other player's ships
+    int ene_X = (rand() % 3) + 1; // Random number between 1 and 3
+    int ene_Y = (rand() % 3) + 1; // Random number between 1 and 3
+
+    for(int i = 0; i <= MAXSHIPS; i++) {
+            double playerDistanceSquared = (enemyshipsXcords[i] - pos_x) * (enemyshipsXcords[i] - pos_x) + (enemyshipsYcords[i] - pos_y) * (enemyshipsYcords[i] - pos_y);
+            double enemyDistanceSquared = (XcordArray[i] - ene_X) * (XcordArray[i] - ene_X) + (YcordArray[i] - ene_Y) * (YcordArray[i] - ene_Y);
+
+            if(playerDistanceSquared <= missileRadius) {
+                hit = true;
+                enemyshipsXcords[i] = -1; // Mark the ship as hit
+                enemyshipsYcords[i] = -1;
+                break; // No need to check other ships
+            }
+            else if(enemyDistanceSquared <= missileRadius) {
+                enemyHit = true;
+                XcordArray[i] = -1; // Mark the ship as hit
+                YcordArray[i] = -1;
+                break; // No need to check other ships
+            }
         }
-    }
 
     if (hit) {
-        std::cout << "The enemy has sunk one of your battleships." << endl;
-    } else {
-        std::cout << "The enemy missed their shot." << endl;
+        cout << "You hit an enemy ship!" << endl;
+    } 
+    else {
+        cout << "You missed" << endl;
     }
+
+    if (enemyHit) {
+        cout << "The enemy has sunk one of your battleships." << endl;
+    } 
+    else {
+        cout << "The enemy missed their shot." << endl;
+    }
+
 }
+
+    
+
+    
+
 
 int main() {
     selectWarhead();
-    placeships();
+    Ships();
     Enemyships();
 
     int enemyShipsRemaining = MAXSHIPS;
@@ -196,7 +210,6 @@ int main() {
     while (enemyShipsRemaining > 0 && playerShipsRemaining > 0) {
         Firing();
         checkHit();
-        enemyFiring();
 
         // Check how many enemy and player ships remain
         enemyShipsRemaining = 0;
@@ -213,9 +226,9 @@ int main() {
     }
 
     if (enemyShipsRemaining == 0) {
-        std::cout << "You've sunk all enemy ships! You win!" << endl;
+        cout << "You've sunk all enemy ships! You win!" << endl;
     } else {
-        std::cout << "The enemy has sunk all your ships. You lose!" << endl;
+        cout << "The enemy has sunk all your ships. You lose!" << endl;
     }
 
     return 0;

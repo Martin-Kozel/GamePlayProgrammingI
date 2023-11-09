@@ -81,7 +81,8 @@ void placeships() {
                     cout << "You already have a ship there. Enter a different position." << endl;
                     validInput = false;
                 }
-            } else {
+            } 
+            else {
                 cout << "ERROR: Enter another position of X & Y between 1 - 3" << endl;
             }
         }
