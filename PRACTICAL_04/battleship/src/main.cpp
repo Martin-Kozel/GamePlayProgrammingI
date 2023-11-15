@@ -244,8 +244,10 @@ void checkHit()
     // Loop to check if player or enemy ships are hit
     for(int i = 0; i <= MAXSHIPS; i++) 
     {
-        double playerDistanceSquared = (enemyshipsXcords[i] - pos_x) * (enemyshipsXcords[i] - pos_x) + (enemyshipsYcords[i] - pos_y) * (enemyshipsYcords[i] - pos_y);
-        double enemyDistanceSquared = (XcordArray[i] - ene_X) * (XcordArray[i] - ene_X) + (YcordArray[i] - ene_Y) * (YcordArray[i] - ene_Y);
+        double playerDistanceSquared = (enemyshipsXcords[i] - pos_x) * (enemyshipsXcords[i] - pos_x) + 
+                                        (enemyshipsYcords[i] - pos_y) * (enemyshipsYcords[i] - pos_y);
+        double enemyDistanceSquared = (XcordArray[i] - ene_X) * (XcordArray[i] - ene_X) + 
+                                        (YcordArray[i] - ene_Y) * (YcordArray[i] - ene_Y);
 
         // Check if player or enemy ship is hit based on distance
         if(playerDistanceSquared <= missileRadius) 
