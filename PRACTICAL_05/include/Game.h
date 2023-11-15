@@ -15,6 +15,7 @@ class Game
 		void draw();
 		Player* player;
 		NPC* npc;
+		NPC* npc_Cir;
 };
 
 #endif
