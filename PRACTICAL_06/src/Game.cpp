@@ -17,12 +17,23 @@ void Game::initialize()
     Command *moveDown = new MoveDownCommand();
     Command *moveLeft = new MoveLeftCommand();
     Command *moveRight = new MoveRightCommand();
+    Command *jump = new JumpCommand();
+    Command *sprint = new SprintCommand();
+    Command *crouch = new CrouchCommand();
+    Command *shield = new ShieldCommand();
+    Command *attack = new AttackCommand();
+
 
     // Map Keys to Commands
     InputManager::getInstance()->keyCommand(Keyboard::W, moveUp);
     InputManager::getInstance()->keyCommand(Keyboard::S, moveDown);
     InputManager::getInstance()->keyCommand(Keyboard::A, moveLeft);
     InputManager::getInstance()->keyCommand(Keyboard::D, moveRight);
+    InputManager::getInstance()->keyCommand(Keyboard::Space, jump);
+    InputManager::getInstance()->keyCommand(Keyboard::LShift, sprint);
+    InputManager::getInstance()->keyCommand(Keyboard::LControl, crouch);
+    InputManager::getInstance()->keyCommand(Keyboard::Q, shield);
+    InputManager::getInstance()->keyCommand(Keyboard::E, attack);
 
     // Init Player with Position and Texture
     player = new Player(Vector2f(100, 100), "./images/player/Player");

@@ -18,6 +18,8 @@ sf::Texture npc_texture;
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
 
+
+
 sf::RectangleShape player_rect(sf::Vector2f(100, 100));
 sf::RectangleShape npc_rect(sf::Vector2f(100, 100));
 sf::CircleShape npc_cir(50);

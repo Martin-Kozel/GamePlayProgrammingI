@@ -54,3 +54,29 @@ void GameObject::moveRight()
 {
 	this->position.x += 5;
 }
+
+void GameObject::jump()
+{
+	std::cout << "JUMP" << std::endl;
+	this->position.y -= 100;
+}
+
+void GameObject::sprint(float speed)
+{
+	std::cout << "SPRINTING AT SPEED:" << speed << std::endl;
+	this->position.x += speed;
+}
+void GameObject::crouch()
+{
+	std::cout << "CROUCHING" << std::endl;
+}
+
+void GameObject::shield()
+{
+	std::cout << "SHIELD" << std::endl;
+}
+
+void GameObject::attack()
+{
+	std::cout << "ATTACK" << std::endl;
+}

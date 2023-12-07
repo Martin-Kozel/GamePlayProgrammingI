@@ -22,6 +22,12 @@ public:
 	void moveDown();
 	void moveLeft();
 	void moveRight();
+	void jump();
+	void sprint(float speed);
+	void crouch();
+	void shield();
+	void attack();
+
 protected:
 	Vector2f position;
 	Sprite sprite;

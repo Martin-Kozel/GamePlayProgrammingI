@@ -10,9 +10,9 @@ MSG_CLEAN		:= "Cleaning up"
 
 ifeq ($(OS),Windows_NT)
     os  := Windows
-	@# Make sure your Env Variable is set to SFML
-	@# Tested with SFML 2.5.1 GCC 7.3.0 MinGW (SEH) - 64-bit
-	@# Convert Windows directory path to UNIX Path
+	# Make sure your Env Variable is set to SFML
+	# Tested with SFML 2.5.1 GCC 7.3.0 MinGW (SEH) - 64-bit
+	# Convert Windows directory path to UNIX Path
 	SDK			:=${MYSYS2}
 	SDK_PATH	:=$(subst \,/,$(subst C:\,/c/,$(SDK)))
 	INCLUDES	:= -I${SDK_PATH}/include -I.
