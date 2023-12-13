@@ -50,26 +50,41 @@ int main()
 				break;
 				// Deal with KeyPressed
 			case sf::Event::KeyPressed:
-				// Died Event
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
 				{
-					DEBUG_MSG("gpp::Events::Event::DIED_EVENT");
-					input.setCurrent(gpp::Events::Event::DIED_EVENT);
+					m_Graphics = false;
+				}*/
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				{
+					input.setCurrent(gpp::Events::Event::ATTACK_START_EVENT);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
+				{
+					input.setCurrent(gpp::Events::Event::THROW_START_EVENT);
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+				{
+					input.setCurrent(gpp::Events::Event::JUMP_UP_EVENT);
 				}
 				break;
 				// Deal with KeyReleased
 			case sf::Event::KeyReleased:
-				
-				// Stop Running Right
-				if (event.key.code == sf::Keyboard::Right)
+				if (event.key.code == sf::Keyboard::A)
 				{
-					DEBUG_MSG("gpp::Events::Event::RUN_RIGHT_STOP_EVENT");
-					input.setCurrent(gpp::Events::Event::RUN_RIGHT_STOP_EVENT);
+					input.setCurrent(gpp::Events::Event::ATTACK_STOP_EVENT);
+				}
+				if (event.key.code == sf::Keyboard::T)
+				{
+					input.setCurrent(gpp::Events::Event::THROW_STOP_EVENT);
+				}
+				if (event.key.code == sf::Keyboard::J)
+				{
+					input.setCurrent(gpp::Events::Event::FALL_DOWN_EVENT);
 				}
 				break;
 
 			default:
-				DEBUG_MSG("gpp::Events::Event::NONE");
 				input.setCurrent(gpp::Events::Event::NONE);
 				break;
 			}
