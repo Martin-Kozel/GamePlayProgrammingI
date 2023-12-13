@@ -12,14 +12,14 @@ ifeq ($(OS),Windows_NT)
     os  := Windows
 	INCLUDES	:= -I. -I./include
 	LIBS		:= -L.
-	CXXFLAGS 	:= -std=c++11 -Wall -Wextra -Werror -g ${INCLUDES}
+	CXXFLAGS 	:= -std=c++11 -Wall -Wextra -g ${INCLUDES}
 	LIBRARIES	:= -llibsfml-graphics -llibsfml-window -llibsfml-system
 	TARGET		:= ${BUILD_DIR}/sampleapp.exe
 else
     os := $(shell uname -s)
 	INCLUDES	:= -I. -I./include
 	LIBS		:= -L.
-	CXXFLAGS 	:= -std=c++11 -Wall -Wextra -Werror -g ${INCLUDES}
+	CXXFLAGS 	:= -std=c++11 -Wall -Wextra -g ${INCLUDES}
 	LIBRARIES	:= -lsfml-graphics -lsfml-window -lsfml-system
 	TARGET		:= ${BUILD_DIR}/sampleapp.bin
 endif
